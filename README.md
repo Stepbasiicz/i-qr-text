@@ -31,8 +31,8 @@
 
 | Channel | Action / Link |
 |---|---|
-| **PromptPay 🇹🇭** | ![PromptPay](https://img.shields.io/badge/PromptPay-0056FF?style=for-the-badge&logo=wallet&logoColor=white) <br> *(Scan QR Code via Thai Bank App)* |
-| **Buy Me a Coffee 🌍** | [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com) |
+| **PromptPay 🇹🇭** | ![PromptPay](https://img.shields.io/badge/PromptPay-0056FF?style=for-the-badge&logo=wallet&logoColor=white) <br><br> <img src="promptpay.png" width="200" alt="PromptPay QR"> <br><br> *(Scan via Bank App)* |
+| **Buy Me a Coffee 🌍** | [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/YOUR_USERNAME) |
 
 ---
 *Created with ❤️ for Developers & Creators*
