@@ -13,8 +13,92 @@ document.addEventListener('DOMContentLoaded', () => {
     const sameLabelCheckbox = document.getElementById('sameLabel');
     const canvas = document.getElementById('qrCanvas');
     const ctx = canvas.getContext('2d');
+    const langToggle = document.getElementById('langToggle');
 
     let logoImage = null;
+    let currentLang = 'th'; // Default language
+
+    // Language Dictionary
+    const translations = {
+        en: {
+            subtitle: 'Turn your QR Code into <span class="text-pink-500 font-medium">"YOUR WORDS"</span>',
+            contentLabel: 'Link or Content',
+            fillLabel: 'Fill Text',
+            appearanceTitle: 'Appearance Settings',
+            scaleLabel: 'FONT SCALE',
+            small: 'Small',
+            large: 'Large',
+            weightLabel: 'FONT WEIGHT',
+            normal: 'Normal',
+            bold: 'Bold',
+            extraBold: 'Extra Bold',
+            logoLabel: 'CENTER LOGO',
+            uploadText: 'Click to Upload Logo',
+            frameTitle: 'Frame Labels',
+            sameLabel: 'Use Same Text',
+            generateBtn: 'Generate QR Code',
+            downloadBtn: 'Save Image',
+            tip: 'Tip: Short and bold text scans best!',
+            likeTool: 'Like this tool?'
+        },
+        th: {
+            subtitle: 'เปลี่ยน QR Code ธรรมดา ให้เป็น <span class="text-pink-500 font-medium">"คำพูด"</span> ของคุณ',
+            contentLabel: 'ลิงก์หรือข้อความ (Content)',
+            fillLabel: 'คำที่ใช้แทนจุด (Fill Text)',
+            appearanceTitle: 'ปรับแต่งความสวยงาม',
+            scaleLabel: 'ขนาดตัวอักษร',
+            small: 'เล็ก',
+            large: 'ใหญ่',
+            weightLabel: 'ความหนา',
+            normal: 'Normal (ปกติ)',
+            bold: 'Bold (หนา)',
+            extraBold: 'Extra Bold (หนามาก)',
+            logoLabel: 'โลโก้ตรงกลาง',
+            uploadText: 'คลิกเพื่ออัปโหลดโลโก้',
+            frameTitle: 'ป้ายข้อความรอบด้าน',
+            sameLabel: 'ใช้ข้อความเดียวกัน',
+            generateBtn: 'สร้าง QR Code',
+            downloadBtn: 'บันทึกรูปภาพ',
+            tip: 'Tip: ใช้คำสั้นๆ และตัวหนา จะสแกนง่ายที่สุดครับ',
+            likeTool: 'ชอบเครื่องมือนี้ไหม?'
+        }
+    };
+
+    // Toggle Language
+    langToggle.addEventListener('click', () => {
+        currentLang = currentLang === 'th' ? 'en' : 'th';
+        updateLanguage();
+    });
+
+    function updateLanguage() {
+        // Update Toggle Button Text
+        langToggle.innerHTML = currentLang === 'th' ? '🇬🇧 EN' : '🇹🇭 TH';
+        
+        // Update all elements with data-i18n attribute
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[currentLang][key]) {
+                el.innerHTML = translations[currentLang][key];
+            }
+        });
+
+        // Update Placeholders
+        if (currentLang === 'en') {
+            document.getElementById('qrContent').placeholder = 'https://...';
+            document.getElementById('fillText').placeholder = 'e.g. LOVE, HELLO';
+            document.getElementById('labelTop').placeholder = 'Top';
+            document.getElementById('labelBottom').placeholder = 'Bottom';
+            document.getElementById('labelLeft').placeholder = 'Left';
+            document.getElementById('labelRight').placeholder = 'Right';
+        } else {
+            document.getElementById('qrContent').placeholder = 'https://...';
+            document.getElementById('fillText').placeholder = 'เช่น LOVE, HELLO';
+            document.getElementById('labelTop').placeholder = 'ด้านบน';
+            document.getElementById('labelBottom').placeholder = 'ด้านล่าง';
+            document.getElementById('labelLeft').placeholder = 'ด้านซ้าย';
+            document.getElementById('labelRight').placeholder = 'ด้านขวา';
+        }
+    }
 
     // Default generation
     generateQRCode();

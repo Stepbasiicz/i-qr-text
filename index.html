@@ -16,11 +16,16 @@
 <body class="bg-gradient-to-br from-indigo-50 to-pink-50 min-h-screen flex flex-col items-center py-10 font-sans">
 
     <div class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-5xl border-4 border-indigo-100">
-        <div class="text-center mb-10">
+        <div class="text-center mb-10 relative">
+            <div class="absolute top-0 right-0">
+                <button id="langToggle" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 px-3 py-1 rounded-lg text-sm font-bold transition-colors">
+                    🇬🇧 EN
+                </button>
+            </div>
             <h1 class="text-4xl md:text-5xl font-extrabold text-indigo-600 mb-3 tracking-tight">
                 Text QR Code Generator ✨
             </h1>
-            <p class="text-lg text-gray-500 font-light">
+            <p class="text-lg text-gray-500 font-light" data-i18n="subtitle">
                 เปลี่ยน QR Code ธรรมดา ให้เป็น <span class="text-pink-500 font-medium">"คำพูด"</span> ของคุณ
             </p>
         </div>
@@ -36,7 +41,7 @@
                     <div>
                         <label class="block text-sm font-bold text-indigo-900 mb-2 flex items-center">
                             <span class="bg-indigo-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs mr-2">1</span>
-                            ลิงก์หรือข้อความ (Content)
+                            <span data-i18n="contentLabel">ลิงก์หรือข้อความ (Content)</span>
                         </label>
                         <input type="text" id="qrContent" value="https://example.com" class="w-full px-4 py-3 border-2 border-indigo-200 rounded-xl focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 transition-all outline-none text-gray-700 placeholder-indigo-300" placeholder="https://...">
                     </div>
@@ -44,7 +49,7 @@
                     <div>
                         <label class="block text-sm font-bold text-indigo-900 mb-2 flex items-center">
                             <span class="bg-pink-500 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs mr-2">2</span>
-                            คำที่ใช้แทนจุด (Fill Text)
+                            <span data-i18n="fillLabel">คำที่ใช้แทนจุด (Fill Text)</span>
                         </label>
                         <input type="text" id="fillText" value="LOVE" class="w-full px-4 py-3 border-2 border-pink-200 rounded-xl focus:border-pink-500 focus:ring-4 focus:ring-pink-100 transition-all outline-none text-gray-700 placeholder-pink-300" placeholder="เช่น LOVE, HELLO">
                     </div>
@@ -53,26 +58,26 @@
                 <!-- Appearance Settings -->
                 <div class="bg-white p-6 rounded-2xl border-2 border-gray-100 shadow-sm space-y-5">
                     <h3 class="font-bold text-gray-800 text-lg flex items-center">
-                        🎨 ปรับแต่งความสวยงาม
+                        🎨 <span data-i18n="appearanceTitle">ปรับแต่งความสวยงาม</span>
                     </h3>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">ขนาดตัวอักษร</label>
+                            <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide" data-i18n="scaleLabel">ขนาดตัวอักษร</label>
                             <div class="flex items-center space-x-3 bg-gray-50 p-3 rounded-lg">
-                                <span class="text-xs text-gray-400">เล็ก</span>
+                                <span class="text-xs text-gray-400" data-i18n="small">เล็ก</span>
                                 <input type="range" id="fontScale" min="0.5" max="2.0" step="0.1" value="1.1" class="w-full accent-indigo-500 cursor-pointer">
-                                <span class="text-xs text-gray-400">ใหญ่</span>
+                                <span class="text-xs text-gray-400" data-i18n="large">ใหญ่</span>
                             </div>
                         </div>
                         
                         <div>
-                            <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">ความหนา</label>
+                            <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide" data-i18n="weightLabel">ความหนา</label>
                             <div class="relative">
                                 <select id="fontWeight" class="w-full px-4 py-3 bg-gray-50 border-0 rounded-lg text-gray-700 font-medium appearance-none cursor-pointer hover:bg-gray-100 transition-colors focus:ring-2 focus:ring-indigo-200">
-                                    <option value="400">Normal (ปกติ)</option>
-                                    <option value="700">Bold (หนา)</option>
-                                    <option value="900" selected>Extra Bold (หนามาก)</option>
+                                    <option value="400" data-i18n="normal">Normal (ปกติ)</option>
+                                    <option value="700" data-i18n="bold">Bold (หนา)</option>
+                                    <option value="900" selected data-i18n="extraBold">Extra Bold (หนามาก)</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -82,11 +87,11 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">โลโก้ตรงกลาง</label>
+                        <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide" data-i18n="logoLabel">โลโก้ตรงกลาง</label>
                         <label class="flex items-center justify-center w-full h-14 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:border-indigo-400 hover:bg-indigo-50 transition-all group">
                             <div class="flex items-center space-x-2">
                                 <svg class="w-6 h-6 text-gray-400 group-hover:text-indigo-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                <span class="text-sm text-gray-500 group-hover:text-indigo-600 font-medium transition-colors">คลิกเพื่ออัปโหลดโลโก้</span>
+                                <span class="text-sm text-gray-500 group-hover:text-indigo-600 font-medium transition-colors" data-i18n="uploadText">คลิกเพื่ออัปโหลดโลโก้</span>
                             </div>
                             <input type="file" id="logoInput" accept="image/*" class="hidden">
                         </label>
@@ -97,11 +102,11 @@
                 <div class="bg-orange-50 p-6 rounded-2xl border border-orange-100 relative overflow-hidden">
                     <div class="flex items-center justify-between mb-4 relative z-10">
                         <h3 class="font-bold text-orange-800 flex items-center">
-                            <span class="mr-2">🖼️</span> ป้ายข้อความรอบด้าน
+                            <span class="mr-2">🖼️</span> <span data-i18n="frameTitle">ป้ายข้อความรอบด้าน</span>
                         </h3>
                         <label class="flex items-center bg-white px-3 py-1.5 rounded-full shadow-sm cursor-pointer hover:bg-orange-100 transition-colors border border-orange-100">
                             <input type="checkbox" id="sameLabel" class="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500">
-                            <span class="ml-2 text-xs font-medium text-orange-700">ใช้ข้อความเดียวกัน</span>
+                            <span class="ml-2 text-xs font-medium text-orange-700" data-i18n="sameLabel">ใช้ข้อความเดียวกัน</span>
                         </label>
                     </div>
                     
@@ -117,12 +122,12 @@
                 <div class="flex flex-col sm:flex-row gap-4 pt-2">
                     <button id="generateBtn" class="flex-1 bg-gradient-to-r from-indigo-600 to-violet-600 text-white py-3.5 rounded-xl font-bold hover:shadow-lg hover:scale-[1.02] transition-all duration-300 flex items-center justify-center shadow-md shadow-indigo-200">
                         <svg class="w-5 h-5 mr-2 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        สร้าง QR Code
+                        <span data-i18n="generateBtn">สร้าง QR Code</span>
                     </button>
                     
                     <button id="downloadBtn" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-3.5 rounded-xl font-bold hover:shadow-lg hover:scale-[1.02] transition-all duration-300 shadow-md shadow-emerald-200 hidden flex items-center justify-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                        บันทึกรูปภาพ
+                        <span data-i18n="downloadBtn">บันทึกรูปภาพ</span>
                     </button>
                 </div>
             </div>
@@ -141,14 +146,14 @@
                             </div>
                             <p class="text-gray-400 text-xs mt-6 flex items-center bg-gray-800 px-4 py-2 rounded-full">
                                 <svg class="w-4 h-4 mr-2 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                Tip: ใช้คำสั้นๆ และตัวหนา จะสแกนง่ายที่สุดครับ
+                                <span data-i18n="tip">Tip: ใช้คำสั้นๆ และตัวหนา จะสแกนง่ายที่สุดครับ</span>
                             </p>
                         </div>
                     </div>
                     
                     <!-- Support Badge -->
                     <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
-                        <span class="text-sm font-medium text-gray-600">ชอบเครื่องมือนี้ไหม?</span>
+                        <span class="text-sm font-medium text-gray-600" data-i18n="likeTool">ชอบเครื่องมือนี้ไหม?</span>
                         <a href="https://github.com/Stepbasiicz/i-qr-text" target="_blank" class="text-xs bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded-lg transition-colors flex items-center">
                             <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                             Star on GitHub
