@@ -42,7 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
             likeTool: 'Like this tool?',
             projectDisclaimer: 'Just for fun! 🥳 Wishing you happiness every day.',
             coffeeText: 'If you\'re happy with this, a coffee would make us happy too! ☕️',
-            buyCoffeeBtn: 'Buy me a Coffee'
+             buyCoffeeBtn: 'Buy me a Coffee',
+             visitorLabel: 'Total Visits:'
         },
         th: {
             subtitle: 'เปลี่ยน QR Code ธรรมดา ให้เป็น <span class="text-pink-500 font-medium">"คำพูด"</span> ของคุณ',
@@ -66,7 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
             likeTool: 'ชอบเครื่องมือนี้ไหม?',
             projectDisclaimer: 'โปรเจกต์นี้ทำเพื่อความสนุก 🥳 ขอให้มีความสุขในทุกๆ วันนะครับ',
             coffeeText: 'ถ้าคุณมีความสุขกับเรา มอบกาแฟให้สักแก้ว ก็มีความสุขแล้วครับ ☕️',
-            buyCoffeeBtn: 'เลี้ยงกาแฟเรา'
+            buyCoffeeBtn: 'เลี้ยงกาแฟเรา',
+            visitorLabel: 'เข้าชมแล้ว:'
         }
     };
 
@@ -108,6 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Default generation
     generateQRCode();
+
+    // Fetch Visitor Count
+    fetchVisitorCount();
 
     generateBtn.addEventListener('click', generateQRCode);
     
@@ -353,5 +358,47 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
         };
+    }
+
+    // Visitor Counter Logic
+    function fetchVisitorCount() {
+        const counterElement = document.getElementById('visitorCount');
+        // Use a fixed domain key to ensure count persists across local dev and production
+        // and to avoid 'localhost' pollution if desired.
+        const domainKey = 'i-qr-text-web.stepbasiicz'; 
+
+        fetch('https://visitor.6developer.com/visit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                domain: domainKey,
+                // Optional: Send path to track specific pages, but for total site visits, simple is fine.
+                // page_path: window.location.pathname 
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Animate the number counting up
+            animateValue(counterElement, 0, data.totalCount, 1000);
+        })
+        .catch(err => {
+            console.error('Error fetching visitor count:', err);
+            counterElement.innerText = '-';
+        });
+    }
+
+    function animateValue(obj, start, end, duration) {
+        let startTimestamp = null;
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString();
+            if (progress < 1) {
+                window.requestAnimationFrame(step);
+            }
+        };
+        window.requestAnimationFrame(step);
     }
 });
