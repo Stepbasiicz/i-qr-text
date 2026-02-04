@@ -38,8 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
             sameLabel: 'Use Same Text',
             generateBtn: 'Generate QR Code',
             downloadBtn: 'Save Image',
-            tip: 'Tip: Short and bold text scans best!',
-            likeTool: 'Like this tool?'
+            tip: 'Tip: Short and bold text scans best! (If text overlaps, reduce font size to minimum)',
+            likeTool: 'Like this tool?',
+            projectDisclaimer: 'Just for fun! 🥳 Wishing you happiness every day.',
+            coffeeText: 'If you\'re happy with this, a coffee would make us happy too! ☕️',
+            buyCoffeeBtn: 'Buy me a Coffee'
         },
         th: {
             subtitle: 'เปลี่ยน QR Code ธรรมดา ให้เป็น <span class="text-pink-500 font-medium">"คำพูด"</span> ของคุณ',
@@ -59,8 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
             sameLabel: 'ใช้ข้อความเดียวกัน',
             generateBtn: 'สร้าง QR Code',
             downloadBtn: 'บันทึกรูปภาพ',
-            tip: 'Tip: ใช้คำสั้นๆ และตัวหนา จะสแกนง่ายที่สุดครับ',
-            likeTool: 'ชอบเครื่องมือนี้ไหม?'
+            tip: 'Tip: ใช้คำสั้นๆ ตัวหนา (ถ้าทับกันให้ลดขนาดตัวอักษรลงเล็กสุด) จะสแกนง่ายขึ้นครับ',
+            likeTool: 'ชอบเครื่องมือนี้ไหม?',
+            projectDisclaimer: 'โปรเจกต์นี้ทำเพื่อความสนุก 🥳 ขอให้มีความสุขในทุกๆ วันนะครับ',
+            coffeeText: 'ถ้าคุณมีความสุขกับเรา มอบกาแฟให้สักแก้ว ก็มีความสุขแล้วครับ ☕️',
+            buyCoffeeBtn: 'เลี้ยงกาแฟเรา'
         }
     };
 
