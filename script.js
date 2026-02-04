@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const fillTextInput = document.getElementById('fillText');
     const fontScaleInput = document.getElementById('fontScale');
     const fontWeightInput = document.getElementById('fontWeight');
+    const qrColorInput = document.getElementById('qrColor');
+    const colorValueDisplay = document.getElementById('colorValue');
     const logoInput = document.getElementById('logoInput');
     const labelTopInput = document.getElementById('labelTop');
     const labelBottomInput = document.getElementById('labelBottom');
@@ -32,12 +34,15 @@ document.addEventListener('DOMContentLoaded', () => {
             normal: 'Normal',
             bold: 'Bold',
             extraBold: 'Extra Bold',
+            colorLabel: 'TEXT COLOR',
             logoLabel: 'CENTER LOGO',
             uploadText: 'Click to Upload Logo',
             frameTitle: 'Frame Labels',
             sameLabel: 'Use Same Text',
             generateBtn: 'Generate QR Code',
             downloadBtn: 'Save Image',
+            privacyTitle: '100% Secure & Private',
+            privacyText: 'We do not store any of your personal data, images, or text. All processing happens directly on your device (Client-side) for your peace of mind and safety.',
             tip: 'Tip: Short and bold text scans best! (If text overlaps, reduce font size to minimum)',
             likeTool: 'Like this tool?',
             projectDisclaimer: 'Just for fun! 🥳 Wishing you happiness every day.',
@@ -57,12 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
             normal: 'Normal (ปกติ)',
             bold: 'Bold (หนา)',
             extraBold: 'Extra Bold (หนามาก)',
+            colorLabel: 'สีตัวอักษร',
             logoLabel: 'โลโก้ตรงกลาง',
             uploadText: 'คลิกเพื่ออัปโหลดโลโก้',
             frameTitle: 'ป้ายข้อความรอบด้าน',
             sameLabel: 'ใช้ข้อความเดียวกัน',
             generateBtn: 'สร้าง QR Code',
             downloadBtn: 'บันทึกรูปภาพ',
+            privacyTitle: 'ความปลอดภัย 100%',
+            privacyText: 'เว็บนี้ไม่มีการเก็บข้อมูลส่วนตัว รูปภาพ หรือข้อความของคุณ ข้อมูลทุกอย่างถูกประมวลผลบนเครื่องของคุณเอง (Client-side) เพื่อความสบายใจและความปลอดภัยสูงสุด',
             tip: 'Tip: ใช้คำสั้นๆ ตัวหนา (ถ้าทับกันให้ลดขนาดตัวอักษรลงเล็กสุด) จะสแกนง่ายขึ้นครับ',
             likeTool: 'ชอบเครื่องมือนี้ไหม?',
             projectDisclaimer: 'โปรเจกต์นี้ทำเพื่อความสนุก 🥳 ขอให้มีความสุขในทุกๆ วันนะครับ',
@@ -121,6 +129,10 @@ document.addEventListener('DOMContentLoaded', () => {
     fillTextInput.addEventListener('input', debounce(generateQRCode, 300));
     fontScaleInput.addEventListener('input', generateQRCode);
     fontWeightInput.addEventListener('change', generateQRCode);
+    qrColorInput.addEventListener('input', (e) => {
+        colorValueDisplay.textContent = e.target.value.toUpperCase();
+        debounce(generateQRCode, 100)();
+    });
     
     // Listen for label changes
     [labelTopInput, labelBottomInput, labelLeftInput, labelRightInput].forEach(input => {
@@ -186,6 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const fillText = fillTextInput.value.trim() || 'A';
         const scale = parseFloat(fontScaleInput.value);
         const fontWeight = fontWeightInput.value;
+        const color = qrColorInput.value;
 
         // Labels
         const labelTop = labelTopInput.value.trim();
@@ -222,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Draw Labels (Frame)
             if (hasLabels) {
-                ctx.fillStyle = '#000000';
+                ctx.fillStyle = color;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 const labelFontSize = 60;
@@ -262,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ctx.translate(labelMargin, labelMargin);
 
             // Configure Text
-            ctx.fillStyle = '#000000';
+            ctx.fillStyle = color;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             
@@ -301,6 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         
                         if (isFunctionalPattern(r, c)) {
                             // Draw solid blocks for finder patterns (critical for scanning)
+                            ctx.fillStyle = color; // Ensure finder patterns match selected color
                             ctx.fillRect(x, y, cellSize + 0.5, cellSize + 0.5); 
                         } else {
                             // Draw text for data modules
@@ -309,11 +323,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             
                             // Make text act more like a block:
                             // 1. Draw text
+                            ctx.fillStyle = color; // Ensure text matches selected color
                             ctx.fillText(fillText, centerX, centerY);
                             
                             // 2. Add stroke to make it "fatter" (improves scanning density)
                             ctx.lineWidth = fontSize * 0.05; // 5% stroke
-                            ctx.strokeStyle = '#000000';
+                            ctx.strokeStyle = color;
                             ctx.strokeText(fillText, centerX, centerY);
                         }
                     }
