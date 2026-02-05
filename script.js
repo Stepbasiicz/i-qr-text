@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let logoImage = null;
     let currentLang = 'th'; // Default language
+    const supportedLangs = ['th', 'en', 'cn', 'jp'];
 
     // Language Dictionary
     const translations = {
@@ -83,18 +84,89 @@ document.addEventListener('DOMContentLoaded', () => {
             exampleTitle: 'ตัวอย่างงานจริง',
             exampleDesc: 'ลองสแกนดูนะครับ!',
             popularTagsTitle: 'คำค้นหายอดฮิต'
+        },
+        cn: {
+            subtitle: '将普通二维码转换为您的<span class="text-pink-500 font-medium">"专属文字"</span>',
+            contentLabel: '链接或内容 (Content)',
+            fillLabel: '填充文字 (Fill Text)',
+            appearanceTitle: '外观设置',
+            scaleLabel: '字体大小',
+            small: '小',
+            large: '大',
+            weightLabel: '字体粗细',
+            normal: '正常',
+            bold: '粗体',
+            extraBold: '特粗',
+            colorLabel: '文字颜色',
+            logoLabel: '中心Logo',
+            uploadText: '点击上传Logo',
+            frameTitle: '边框文字',
+            sameLabel: '使用相同文字',
+            generateBtn: '生成二维码',
+            downloadBtn: '保存图片',
+            privacyTitle: '100% 安全隐私',
+            privacyText: '本网站不存储您的任何个人数据、图片或文字。所有处理均在您的设备上直接进行（客户端），确保您的安心与安全。',
+            tip: '提示：短且粗的文字扫描效果最好！（如果文字重叠，请将字体缩小至最小）',
+            likeTool: '喜欢这个工具吗？',
+            projectDisclaimer: '仅供娱乐！🥳 祝您天天开心。',
+            coffeeText: '如果您喜欢这个工具，请我喝杯咖啡吧！☕️',
+            buyCoffeeBtn: '请我喝咖啡',
+            visitorLabel: '总访问量:',
+            exampleTitle: '实际示例',
+            exampleDesc: '试着扫描一下！',
+            popularTagsTitle: '热门搜索'
+        },
+        jp: {
+            subtitle: 'QRコードのドットをあなたの<span class="text-pink-500 font-medium">"言葉"</span>に変える',
+            contentLabel: 'リンクまたはコンテンツ',
+            fillLabel: '埋め込み文字',
+            appearanceTitle: '外観設定',
+            scaleLabel: '文字サイズ',
+            small: '小',
+            large: '大',
+            weightLabel: '文字の太さ',
+            normal: '標準',
+            bold: '太字',
+            extraBold: '極太',
+            colorLabel: '文字色',
+            logoLabel: '中央ロゴ',
+            uploadText: 'ロゴをアップロード',
+            frameTitle: 'フレーム文字',
+            sameLabel: '同じ文字を使用',
+            generateBtn: 'QRコードを作成',
+            downloadBtn: '画像を保存',
+            privacyTitle: '100% 安全・プライベート',
+            privacyText: '当サイトは、個人データ、画像、テキストを一切保存しません。すべての処理はお使いのデバイス（クライアントサイド）で行われるため、安心してご利用いただけます。',
+            tip: 'ヒント：短くて太い文字がスキャンしやすいです！（文字が重なる場合はサイズを最小にしてください）',
+            likeTool: 'このツールが気に入りましたか？',
+            projectDisclaimer: '楽しんでください！🥳 毎日が幸せでありますように。',
+            coffeeText: 'もし気に入っていただけたら、コーヒーを一杯ご馳走してください！☕️',
+            buyCoffeeBtn: 'コーヒーを奢る',
+            visitorLabel: '総訪問数:',
+            exampleTitle: '実例',
+            exampleDesc: 'スキャンしてみてください！',
+            popularTagsTitle: '人気の検索'
         }
     };
 
     // Toggle Language
     langToggle.addEventListener('click', () => {
-        currentLang = currentLang === 'th' ? 'en' : 'th';
+        // Cycle through languages
+        const currentIndex = supportedLangs.indexOf(currentLang);
+        const nextIndex = (currentIndex + 1) % supportedLangs.length;
+        currentLang = supportedLangs[nextIndex];
         updateLanguage();
     });
 
     function updateLanguage() {
         // Update Toggle Button Text
-        langToggle.innerHTML = currentLang === 'th' ? '🇬🇧 EN' : '🇹🇭 TH';
+        const langLabels = {
+            'th': '🇹🇭 TH',
+            'en': '🇬🇧 EN',
+            'cn': '🇨🇳 CN',
+            'jp': '🇯🇵 JP'
+        };
+        langToggle.innerHTML = langLabels[currentLang];
         
         // Update all elements with data-i18n attribute
         document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -105,21 +177,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Update Placeholders
-        if (currentLang === 'en') {
-            document.getElementById('qrContent').placeholder = 'https://...';
-            document.getElementById('fillText').placeholder = 'e.g. LOVE, HELLO';
-            document.getElementById('labelTop').placeholder = 'Top';
-            document.getElementById('labelBottom').placeholder = 'Bottom';
-            document.getElementById('labelLeft').placeholder = 'Left';
-            document.getElementById('labelRight').placeholder = 'Right';
-        } else {
-            document.getElementById('qrContent').placeholder = 'https://...';
-            document.getElementById('fillText').placeholder = 'เช่น LOVE, HELLO';
-            document.getElementById('labelTop').placeholder = 'ด้านบน';
-            document.getElementById('labelBottom').placeholder = 'ด้านล่าง';
-            document.getElementById('labelLeft').placeholder = 'ด้านซ้าย';
-            document.getElementById('labelRight').placeholder = 'ด้านขวา';
-        }
+        const placeholders = {
+            en: {
+                qrContent: 'https://...',
+                fillText: 'e.g. LOVE, HELLO',
+                top: 'Top', bottom: 'Bottom', left: 'Left', right: 'Right'
+            },
+            th: {
+                qrContent: 'https://...',
+                fillText: 'เช่น LOVE, HELLO',
+                top: 'ด้านบน', bottom: 'ด้านล่าง', left: 'ด้านซ้าย', right: 'ด้านขวา'
+            },
+            cn: {
+                qrContent: 'https://...',
+                fillText: '例如 LOVE, HELLO',
+                top: '顶部', bottom: '底部', left: '左侧', right: '右侧'
+            },
+            jp: {
+                qrContent: 'https://...',
+                fillText: '例：LOVE, HELLO',
+                top: '上', bottom: '下', left: '左', right: '右'
+            }
+        };
+
+        const currentPlaceholders = placeholders[currentLang];
+        document.getElementById('qrContent').placeholder = currentPlaceholders.qrContent;
+        document.getElementById('fillText').placeholder = currentPlaceholders.fillText;
+        document.getElementById('labelTop').placeholder = currentPlaceholders.top;
+        document.getElementById('labelBottom').placeholder = currentPlaceholders.bottom;
+        document.getElementById('labelLeft').placeholder = currentPlaceholders.left;
+        document.getElementById('labelRight').placeholder = currentPlaceholders.right;
     }
 
     // Default generation
