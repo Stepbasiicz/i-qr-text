@@ -107,12 +107,12 @@
                             <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide" data-i18n="weightLabel">ความหนา</label>
                             <div class="relative">
                                 <select id="fontWeight" class="w-full px-4 py-3 bg-gray-50 border-0 rounded-lg text-gray-700 font-medium appearance-none cursor-pointer hover:bg-gray-100 transition-colors focus:ring-2 focus:ring-indigo-200">
-                                    <option value="400" data-i18n="normal">Normal (ปกติ)</option>
-                                    <option value="700" data-i18n="bold">Bold (หนา)</option>
-                                    <option value="900" selected data-i18n="extraBold">Extra Bold (หนามาก)</option>
+                                    <option value="normal" data-i18n="normal">Normal (ปกติ)</option>
+                                    <option value="bold" selected data-i18n="bold">Bold (หนา)</option>
+                                    <option value="900" data-i18n="extraBold">Extra Bold (หนามาก)</option>
                                 </select>
-                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-gray-500">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                <div class="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none text-gray-400">
+                                    ▼
                                 </div>
                             </div>
                         </div>
@@ -124,6 +124,49 @@
                                 <span class="text-sm text-gray-600 font-mono" id="colorValue">#000000</span>
                             </div>
                         </div>
+                    </div>
+
+                    <!-- Corner & Frame Styles -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2 border-t border-gray-100">
+                        <!-- Corner Style -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide" data-i18n="cornerStyleLabel">สไตล์มุม (Corner)</label>
+                            <div class="flex gap-2">
+                                <button class="corner-btn w-10 h-10 rounded border-2 border-indigo-500 bg-indigo-50 flex items-center justify-center hover:bg-indigo-100 transition-all" data-style="square" title="Square">
+                                    <div class="w-5 h-5 border-2 border-indigo-600 bg-indigo-600"></div>
+                                </button>
+                                <button class="corner-btn w-10 h-10 rounded border-2 border-gray-200 bg-white flex items-center justify-center hover:border-indigo-300 transition-all" data-style="rounded" title="Rounded">
+                                    <div class="w-5 h-5 border-2 border-gray-400 rounded-md"></div>
+                                </button>
+                                <button class="corner-btn w-10 h-10 rounded border-2 border-gray-200 bg-white flex items-center justify-center hover:border-indigo-300 transition-all" data-style="circle" title="Circle">
+                                    <div class="w-5 h-5 border-2 border-gray-400 rounded-full"></div>
+                                </button>
+                                <input type="hidden" id="cornerStyle" value="square">
+                            </div>
+                        </div>
+
+                        <!-- Frame Style -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide" data-i18n="frameStyleLabel">กรอบ (Frame)</label>
+                            <div class="flex gap-2">
+                                <button class="frame-btn w-10 h-10 rounded border-2 border-indigo-500 bg-indigo-50 flex items-center justify-center hover:bg-indigo-100 transition-all" data-style="none" title="None">
+                                    <span class="text-xs text-indigo-600">🚫</span>
+                                </button>
+                                <button class="frame-btn w-10 h-10 rounded border-2 border-gray-200 bg-white flex items-center justify-center hover:border-indigo-300 transition-all" data-style="simple" title="Simple">
+                                    <div class="w-6 h-6 border-2 border-gray-400"></div>
+                                </button>
+                                <button class="frame-btn w-10 h-10 rounded border-2 border-gray-200 bg-white flex items-center justify-center hover:border-indigo-300 transition-all" data-style="polaroid" title="Polaroid">
+                                    <div class="w-5 h-6 border border-gray-400 bg-gray-100 flex flex-col items-center justify-end pb-0.5"><div class="w-3 h-0.5 bg-gray-400"></div></div>
+                                </button>
+                                <input type="hidden" id="frameStyle" value="none">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Frame Text (Visible only if frame selected) -->
+                    <div id="frameTextGroup" class="hidden">
+                        <label class="block text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide" data-i18n="frameTextLabel">ข้อความบนกรอบ (Frame Text)</label>
+                        <input type="text" id="frameText" value="SCAN ME" class="w-full px-4 py-2 border-2 border-gray-200 rounded-lg focus:border-indigo-500 outline-none text-sm">
                     </div>
 
                     <div>

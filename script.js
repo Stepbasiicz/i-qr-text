@@ -13,9 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const labelLeftInput = document.getElementById('labelLeft');
     const labelRightInput = document.getElementById('labelRight');
     const sameLabelCheckbox = document.getElementById('sameLabel');
+    const cornerStyleInput = document.getElementById('cornerStyle');
+    const frameStyleInput = document.getElementById('frameStyle');
+    const frameTextInput = document.getElementById('frameText');
+    const frameTextGroup = document.getElementById('frameTextGroup');
     const canvas = document.getElementById('qrCanvas');
     const ctx = canvas.getContext('2d');
     const langBtns = document.querySelectorAll('.lang-btn');
+    const cornerBtns = document.querySelectorAll('.corner-btn');
+    const frameBtns = document.querySelectorAll('.frame-btn');
 
     let logoImage = null;
     let currentLang = 'th'; // Default language
@@ -52,7 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
              visitorLabel: 'Total Visits:',
              exampleTitle: 'Real Example',
             exampleDesc: 'Try scanning this!',
-            popularTagsTitle: 'Popular Searches'
+            popularTagsTitle: 'Popular Searches',
+            cornerStyleLabel: 'CORNER STYLE',
+            frameStyleLabel: 'FRAME STYLE',
+            frameTextLabel: 'FRAME TEXT'
         },
         th: {
             subtitle: 'เปลี่ยน QR Code ธรรมดา ให้เป็น <span class="text-pink-500 font-medium">"คำพูด"</span> ของคุณ',
@@ -83,7 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
             visitorLabel: 'เข้าชมแล้ว:',
             exampleTitle: 'ตัวอย่างงานจริง',
             exampleDesc: 'ลองสแกนดูนะครับ!',
-            popularTagsTitle: 'คำค้นหายอดฮิต'
+            popularTagsTitle: 'คำค้นหายอดฮิต',
+            cornerStyleLabel: 'สไตล์มุม (Corner)',
+            frameStyleLabel: 'กรอบ (Frame)',
+            frameTextLabel: 'ข้อความบนกรอบ'
         },
         cn: {
             subtitle: '将普通二维码转换为您的<span class="text-pink-500 font-medium">"专属文字"</span>',
@@ -114,7 +126,10 @@ document.addEventListener('DOMContentLoaded', () => {
             visitorLabel: '总访问量:',
             exampleTitle: '实际示例',
             exampleDesc: '试着扫描一下！',
-            popularTagsTitle: '热门搜索'
+            popularTagsTitle: '热门搜索',
+            cornerStyleLabel: '角样式 (Corner)',
+            frameStyleLabel: '边框样式 (Frame)',
+            frameTextLabel: '边框文字'
         },
         jp: {
             subtitle: 'QRコードのドットをあなたの<span class="text-pink-500 font-medium">"言葉"</span>に変える',
@@ -145,7 +160,10 @@ document.addEventListener('DOMContentLoaded', () => {
             visitorLabel: '総訪問数:',
             exampleTitle: '実例',
             exampleDesc: 'スキャンしてみてください！',
-            popularTagsTitle: '人気の検索'
+            popularTagsTitle: '人気の検索',
+            cornerStyleLabel: '角のスタイル',
+            frameStyleLabel: 'フレームスタイル',
+            frameTextLabel: 'フレームのテキスト'
         }
     };
 
@@ -300,6 +318,57 @@ document.addEventListener('DOMContentLoaded', () => {
         labelLeftInput.value = val;
         labelRightInput.value = val;
     }
+
+    // Corner Style Listeners
+    cornerBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update active state
+            cornerBtns.forEach(b => {
+                b.classList.remove('border-indigo-500', 'bg-indigo-50');
+                b.classList.add('border-gray-200', 'bg-white');
+                b.querySelector('div').classList.remove('border-indigo-600', 'bg-indigo-600');
+                b.querySelector('div').classList.add('border-gray-400');
+                if(b.dataset.style === 'square') b.querySelector('div').classList.remove('bg-indigo-600'); 
+            });
+            btn.classList.remove('border-gray-200', 'bg-white');
+            btn.classList.add('border-indigo-500', 'bg-indigo-50');
+            
+            const div = btn.querySelector('div');
+            div.classList.remove('border-gray-400');
+            div.classList.add('border-indigo-600');
+            if(btn.dataset.style === 'square') div.classList.add('bg-indigo-600');
+
+            cornerStyleInput.value = btn.dataset.style;
+            generateQRCode();
+        });
+    });
+
+    // Frame Style Listeners
+    frameBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update active state
+            frameBtns.forEach(b => {
+                b.classList.remove('border-indigo-500', 'bg-indigo-50');
+                b.classList.add('border-gray-200', 'bg-white');
+            });
+            btn.classList.remove('border-gray-200', 'bg-white');
+            btn.classList.add('border-indigo-500', 'bg-indigo-50');
+
+            const style = btn.dataset.style;
+            frameStyleInput.value = style;
+
+            // Show/Hide Frame Text Input
+            if (style === 'none') {
+                frameTextGroup.classList.add('hidden');
+            } else {
+                frameTextGroup.classList.remove('hidden');
+            }
+
+            generateQRCode();
+        });
+    });
+
+    frameTextInput.addEventListener('input', debounce(generateQRCode, 300));
     
     logoInput.addEventListener('change', (e) => {
         const file = e.target.files[0];
@@ -333,13 +402,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const scale = parseFloat(fontScaleInput.value);
         const fontWeight = fontWeightInput.value;
         const color = qrColorInput.value;
+        
+        // Styles
+        const cornerStyle = cornerStyleInput.value;
+        const frameStyle = frameStyleInput.value;
+        const frameText = frameTextInput.value.trim();
 
-        // Labels
+        // Manual Labels (Only used if frameStyle is none)
         const labelTop = labelTopInput.value.trim();
         const labelBottom = labelBottomInput.value.trim();
         const labelLeft = labelLeftInput.value.trim();
         const labelRight = labelRightInput.value.trim();
-        const hasLabels = labelTop || labelBottom || labelLeft || labelRight;
+        const hasManualLabels = (labelTop || labelBottom || labelLeft || labelRight) && frameStyle === 'none';
 
         try {
             // Use Type 0 (Auto), Error Correction Level H (High) - best for custom QRs
@@ -349,150 +423,269 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const moduleCount = qr.getModuleCount();
             
-            // Set high resolution for canvas
+            // Base configuration
             const baseSize = 1000;
-            const labelMargin = hasLabels ? 150 : 0; // Margin for text
-            const totalSize = baseSize + (labelMargin * 2);
+            let totalSize = baseSize;
+            let offsetX = 0;
+            let offsetY = 0;
             
-            canvas.width = totalSize;
-            canvas.height = totalSize;
-            
-            // Display size via CSS can be smaller, but internal resolution is high
+            // Frame / Margin Calculations
+            if (frameStyle === 'none') {
+                const labelMargin = hasManualLabels ? 150 : 0;
+                totalSize = baseSize + (labelMargin * 2);
+                offsetX = labelMargin;
+                offsetY = labelMargin;
+            } else if (frameStyle === 'simple') {
+                const padding = 100;
+                totalSize = baseSize + (padding * 2);
+                offsetX = padding;
+                offsetY = padding;
+            } else if (frameStyle === 'polaroid') {
+                const padding = 80;
+                const bottomPadding = 300;
+                // For polaroid, we will adjust canvas dimensions directly below
+                totalSize = baseSize + (padding * 2); 
+                offsetX = padding;
+                offsetY = padding;
+            }
+
+            // Canvas Sizing
+            if (frameStyle === 'polaroid') {
+                const padding = 80;
+                const bottomPadding = 300;
+                canvas.width = baseSize + (padding * 2);
+                canvas.height = baseSize + padding + bottomPadding;
+            } else {
+                canvas.width = totalSize;
+                canvas.height = totalSize;
+            }
+
+            // CSS Display Size
             canvas.style.width = '400px';
-            canvas.style.height = '400px';
+            canvas.style.height = 'auto'; // Maintain aspect ratio
+
+            const ctxWidth = canvas.width;
+            const ctxHeight = canvas.height;
 
             const cellSize = baseSize / moduleCount;
 
             // Clear canvas
             ctx.fillStyle = '#FFFFFF';
-            ctx.fillRect(0, 0, totalSize, totalSize);
-            
-            // Draw Labels (Frame)
-            if (hasLabels) {
-                ctx.fillStyle = color;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                const labelFontSize = 60;
-                ctx.font = `bold ${labelFontSize}px 'Kanit', sans-serif`;
+            ctx.fillRect(0, 0, ctxWidth, ctxHeight);
+
+            // Draw Frame Backgrounds/Borders
+            if (frameStyle === 'simple') {
+                ctx.lineWidth = 20;
+                ctx.strokeStyle = '#000000';
+                ctx.strokeRect(20, 20, ctxWidth - 40, ctxHeight - 40);
+            } else if (frameStyle === 'polaroid') {
+                // Polaroid background is already white (cleared)
+                // Border
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#E5E7EB'; // Gray-200
+                ctx.strokeRect(1, 1, ctxWidth - 2, ctxHeight - 2);
                 
-                // Top
-                if (labelTop) {
-                    ctx.fillText(labelTop, totalSize / 2, labelMargin / 2);
-                }
-                
-                // Bottom
-                if (labelBottom) {
-                    ctx.fillText(labelBottom, totalSize / 2, totalSize - (labelMargin / 2));
-                }
-                
-                // Left (Rotated -90 degrees)
-                if (labelLeft) {
-                    ctx.save();
-                    ctx.translate(labelMargin / 2, totalSize / 2);
-                    ctx.rotate(-Math.PI / 2);
-                    ctx.fillText(labelLeft, 0, 0);
-                    ctx.restore();
-                }
-                
-                // Right (Rotated 90 degrees)
-                if (labelRight) {
-                    ctx.save();
-                    ctx.translate(totalSize - (labelMargin / 2), totalSize / 2);
-                    ctx.rotate(Math.PI / 2);
-                    ctx.fillText(labelRight, 0, 0);
-                    ctx.restore();
-                }
+                // Inner image border (around QR)
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#F3F4F6'; // Gray-100
+                ctx.strokeRect(offsetX - 10, offsetY - 10, baseSize + 20, baseSize + 20);
             }
 
-            // Offset context for QR drawing
-            ctx.save();
-            ctx.translate(labelMargin, labelMargin);
-
-            // Configure Text
-            ctx.fillStyle = color;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            
-            // Dynamic font size calculation
-            // We want the text to roughly fit the cell. 
-            // 1em usually approximates the height.
-            const fontSize = cellSize * scale;
-            ctx.font = `${fontWeight} ${fontSize}px 'Kanit', sans-serif`;
-
-            // Helper to identify Finder Patterns (3 corners) & Timing Patterns
-            // Also attempts to cover Alignment Patterns for better scannability
-            const isFunctionalPattern = (r, c) => {
-                // Finder Patterns (7x7)
+            // Helper to identify Finder Patterns
+            const isFinderPattern = (r, c) => {
                 const TOP_LEFT = r < 7 && c < 7;
                 const TOP_RIGHT = r < 7 && c >= moduleCount - 7;
                 const BOTTOM_LEFT = r >= moduleCount - 7 && c < 7;
-                
-                // Timing Patterns (Row 6 and Col 6)
-                const TIMING = r === 6 || c === 6;
-
-                // Alignment Patterns Protection (Heuristic)
-                // Alignment patterns usually have a center at (r,c) where isDark is true, 
-                // surrounded by light, surrounded by dark. 
-                // However, detecting this dynamically is complex. 
-                // A simpler approach for V1-V10 (most text QRs) is to check if it's "isolated" or part of a distinctive structure.
-                // But relying on "Stroke" text is usually enough.
-                
-                return TOP_LEFT || TOP_RIGHT || BOTTOM_LEFT || TIMING;
+                return TOP_LEFT || TOP_RIGHT || BOTTOM_LEFT;
             };
+
+            // Draw QR Modules (Text)
+            ctx.save();
+            ctx.translate(offsetX, offsetY);
+
+            ctx.fillStyle = color;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            const fontSize = cellSize * scale;
+            ctx.font = `${fontWeight} ${fontSize}px 'Kanit', sans-serif`;
 
             for (let r = 0; r < moduleCount; r++) {
                 for (let c = 0; c < moduleCount; c++) {
                     if (qr.isDark(r, c)) {
-                        const x = c * cellSize;
-                        const y = r * cellSize;
+                        // Skip Finder Patterns if we are styling them custom
+                        if (isFinderPattern(r, c)) {
+                            continue; 
+                        }
+
+                        const x = (c * cellSize) + (cellSize / 2);
+                        const y = (r * cellSize) + (cellSize / 2);
                         
-                        if (isFunctionalPattern(r, c)) {
-                            // Draw solid blocks for finder patterns (critical for scanning)
-                            ctx.fillStyle = color; // Ensure finder patterns match selected color
-                            ctx.fillRect(x, y, cellSize + 0.5, cellSize + 0.5); 
-                        } else {
-                            // Draw text for data modules
-                            const centerX = x + (cellSize / 2);
-                            const centerY = y + (cellSize / 2);
-                            
-                            // Make text act more like a block:
-                            // 1. Draw text
-                            ctx.fillStyle = color; // Ensure text matches selected color
-                            ctx.fillText(fillText, centerX, centerY);
-                            
-                            // 2. Add stroke to make it "fatter" (improves scanning density)
-                            ctx.lineWidth = fontSize * 0.05; // 5% stroke
+                        // Draw Text
+                        ctx.fillText(fillText, x, y);
+                        // Optional: Add stroke for weight
+                        if (fontWeight === 'bold' || fontWeight === '900') {
+                            ctx.lineWidth = fontSize * 0.05;
                             ctx.strokeStyle = color;
-                            ctx.strokeText(fillText, centerX, centerY);
+                            ctx.strokeText(fillText, x, y);
                         }
                     }
                 }
             }
-
-                // Draw Logo if exists
-            if (logoImage) {
-                const logoSize = baseSize * 0.22; // 22% of QR size (safe for Level H)
-                const logoX = (baseSize - logoSize) / 2;
-                const logoY = (baseSize - logoSize) / 2;
-
-                // Draw white background for logo
-                ctx.fillStyle = '#FFFFFF';
-                // Add a small padding
-                const padding = 10;
-                ctx.fillRect(logoX - padding, logoY - padding, logoSize + (padding * 2), logoSize + (padding * 2));
-
-                // Draw Logo
-                ctx.drawImage(logoImage, logoX, logoY, logoSize, logoSize);
-            }
             
-            // Restore context after QR drawing
+            // Draw Custom Finder Patterns
+            drawFinderPatterns(ctx, moduleCount, cellSize, cornerStyle, color);
+
             ctx.restore();
 
+            // Draw Frame Text / Manual Labels
+            if (frameStyle === 'none' && hasManualLabels) {
+                drawManualLabels(ctx, ctxWidth, color);
+            } else if (frameStyle !== 'none' && frameText) {
+                ctx.fillStyle = '#000000'; // Always black or maybe match QR color? Let's use black for frame text usually
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                if (frameStyle === 'simple') {
+                    ctx.font = `bold 60px 'Kanit', sans-serif`;
+                    // Text at bottom margin area (padding is 100)
+                    ctx.fillText(frameText, ctxWidth / 2, ctxHeight - 50);
+                } else if (frameStyle === 'polaroid') {
+                    ctx.font = `bold 80px 'Kanit', sans-serif`;
+                    // Text centered in the bottom padding area (300px high)
+                    const bottomAreaStart = ctxHeight - 300;
+                    ctx.fillText(frameText, ctxWidth / 2, bottomAreaStart + 150);
+                }
+            }
+
+            // Draw Logo
+            if (logoImage) {
+                const logoSize = baseSize * 0.22; // 22% of QR size
+                // Calculate logo position relative to QR area
+                const lx = offsetX + (baseSize - logoSize) / 2;
+                const ly = offsetY + (baseSize - logoSize) / 2;
+                
+                // White background for logo
+                ctx.fillStyle = '#FFFFFF';
+                const padding = 10;
+                ctx.fillRect(lx - padding, ly - padding, logoSize + (padding * 2), logoSize + (padding * 2));
+
+                ctx.drawImage(logoImage, lx, ly, logoSize, logoSize);
+            }
+            
             downloadBtn.classList.remove('hidden');
 
-        } catch (err) {
-            console.error(err);
-            alert('Error generating QR Code. Text might be too long for this version.');
+        } catch (e) {
+            console.error(e);
+            alert('Error generating QR Code. Please try shorter text.');
+        }
+    }
+
+    function drawFinderPatterns(ctx, moduleCount, cellSize, style, color) {
+        ctx.fillStyle = color;
+        const patternSize = 7 * cellSize;
+        
+        // Positions relative to QR area (0,0)
+        const pos = [
+            { r: 0, c: 0 }, // Top Left
+            { r: 0, c: moduleCount - 7 }, // Top Right
+            { r: moduleCount - 7, c: 0 } // Bottom Left
+        ];
+
+        pos.forEach(p => {
+            const x = p.c * cellSize;
+            const y = p.r * cellSize;
+
+            if (style === 'square') {
+                // Outer Box
+                ctx.fillRect(x, y, patternSize, patternSize);
+                // Inner White
+                ctx.clearRect(x + cellSize, y + cellSize, 5 * cellSize, 5 * cellSize);
+                // Inner Box
+                ctx.fillRect(x + 2 * cellSize, y + 2 * cellSize, 3 * cellSize, 3 * cellSize);
+            } else if (style === 'rounded') {
+                // Outer Rounded
+                roundRect(ctx, x, y, patternSize, patternSize, 2 * cellSize);
+                ctx.fill();
+                // Inner White (Clear)
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-out';
+                roundRect(ctx, x + cellSize, y + cellSize, 5 * cellSize, 5 * cellSize, 1.5 * cellSize);
+                ctx.fill();
+                ctx.restore();
+                // Inner Rounded
+                roundRect(ctx, x + 2 * cellSize, y + 2 * cellSize, 3 * cellSize, 3 * cellSize, cellSize);
+                ctx.fill();
+            } else if (style === 'circle') {
+                // Outer Circle
+                ctx.beginPath();
+                ctx.arc(x + patternSize/2, y + patternSize/2, patternSize/2, 0, Math.PI * 2);
+                ctx.fill();
+                // Inner White
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x + patternSize/2, y + patternSize/2, (5 * cellSize)/2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+                // Inner Circle
+                ctx.beginPath();
+                ctx.arc(x + patternSize/2, y + patternSize/2, (3 * cellSize)/2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        });
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+        if (w < 2 * r) r = w / 2;
+        if (h < 2 * r) r = h / 2;
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+    }
+
+    function drawManualLabels(ctx, totalSize, color) {
+        const labelTop = document.getElementById('labelTop').value.trim();
+        const labelBottom = document.getElementById('labelBottom').value.trim();
+        const labelLeft = document.getElementById('labelLeft').value.trim();
+        const labelRight = document.getElementById('labelRight').value.trim();
+        const labelMargin = 150;
+
+        ctx.fillStyle = color;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const labelFontSize = 60;
+        ctx.font = `bold ${labelFontSize}px 'Kanit', sans-serif`;
+        
+        // Top
+        if (labelTop) {
+            ctx.fillText(labelTop, totalSize / 2, labelMargin / 2);
+        }
+        
+        // Bottom
+        if (labelBottom) {
+            ctx.fillText(labelBottom, totalSize / 2, totalSize - (labelMargin / 2));
+        }
+        
+        // Left (Rotated -90 degrees)
+        if (labelLeft) {
+            ctx.save();
+            ctx.translate(labelMargin / 2, totalSize / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillText(labelLeft, 0, 0);
+            ctx.restore();
+        }
+        
+        // Right (Rotated 90 degrees)
+        if (labelRight) {
+            ctx.save();
+            ctx.translate(totalSize - (labelMargin / 2), totalSize / 2);
+            ctx.rotate(Math.PI / 2);
+            ctx.fillText(labelRight, 0, 0);
+            ctx.restore();
         }
     }
 
