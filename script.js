@@ -48,7 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
             projectDisclaimer: 'Just for fun! 🥳 Wishing you happiness every day.',
             coffeeText: 'If you\'re happy with this, a coffee would make us happy too! ☕️',
              buyCoffeeBtn: 'Buy me a Coffee',
-             visitorLabel: 'Total Visits:'
+             visitorLabel: 'Total Visits:',
+             exampleTitle: 'Real Example',
+             exampleDesc: 'Try scanning this!'
         },
         th: {
             subtitle: 'เปลี่ยน QR Code ธรรมดา ให้เป็น <span class="text-pink-500 font-medium">"คำพูด"</span> ของคุณ',
@@ -76,7 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
             projectDisclaimer: 'โปรเจกต์นี้ทำเพื่อความสนุก 🥳 ขอให้มีความสุขในทุกๆ วันนะครับ',
             coffeeText: 'ถ้าคุณมีความสุขกับเรา มอบกาแฟให้สักแก้ว ก็มีความสุขแล้วครับ ☕️',
             buyCoffeeBtn: 'เลี้ยงกาแฟเรา',
-            visitorLabel: 'เข้าชมแล้ว:'
+            visitorLabel: 'เข้าชมแล้ว:',
+            exampleTitle: 'ตัวอย่างงานจริง',
+            exampleDesc: 'ลองสแกนดูนะครับ!'
         }
     };
 
