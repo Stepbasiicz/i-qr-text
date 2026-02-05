@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sameLabelCheckbox = document.getElementById('sameLabel');
     const canvas = document.getElementById('qrCanvas');
     const ctx = canvas.getContext('2d');
-    const langToggle = document.getElementById('langToggle');
+    const langBtns = document.querySelectorAll('.lang-btn');
 
     let logoImage = null;
     let currentLang = 'th'; // Default language
@@ -149,24 +149,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Toggle Language
-    langToggle.addEventListener('click', () => {
-        // Cycle through languages
-        const currentIndex = supportedLangs.indexOf(currentLang);
-        const nextIndex = (currentIndex + 1) % supportedLangs.length;
-        currentLang = supportedLangs[nextIndex];
-        updateLanguage();
+    // Language Buttons
+    langBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentLang = btn.getAttribute('data-lang');
+            updateLanguage();
+        });
     });
 
     function updateLanguage() {
-        // Update Toggle Button Text
-        const langLabels = {
-            'th': '🇹🇭 TH',
-            'en': '🇬🇧 EN',
-            'cn': '🇨🇳 CN',
-            'jp': '🇯🇵 JP'
-        };
-        langToggle.innerHTML = langLabels[currentLang];
+        // Update Buttons Styling
+        langBtns.forEach(btn => {
+            const lang = btn.getAttribute('data-lang');
+            if (lang === currentLang) {
+                // Active State
+                btn.className = 'lang-btn px-3 py-1.5 rounded-lg text-sm font-bold transition-all bg-indigo-600 text-white shadow-md transform scale-105';
+            } else {
+                // Inactive State
+                btn.className = 'lang-btn px-3 py-1.5 rounded-lg text-sm font-bold transition-all border border-indigo-100 bg-white text-gray-400 hover:bg-indigo-50 hover:text-indigo-600';
+            }
+        });
         
         // Update all elements with data-i18n attribute
         document.querySelectorAll('[data-i18n]').forEach(el => {
