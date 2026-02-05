@@ -207,7 +207,46 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('labelBottom').placeholder = currentPlaceholders.bottom;
         document.getElementById('labelLeft').placeholder = currentPlaceholders.left;
         document.getElementById('labelRight').placeholder = currentPlaceholders.right;
+
+        // Update Popular Tags
+        updatePopularTags();
     }
+
+    function updatePopularTags() {
+        const tags = {
+            en: [
+                'Free QR Code Generator', 'Text QR Code', 'Custom QR Code', 'No Signup', 
+                'QR Code Art', 'High Quality QR', 'Client-side Secure', 'QR Code Dots as Text'
+            ],
+            th: [
+                'สร้าง QR Code ฟรี', 'เปลี่ยนจุดเป็นตัวหนังสือ', 'คิวอาร์โค้ดสวยๆ', 
+                'ไม่ต้องสมัครสมาชิก', 'ทำคิวอาร์โค้ดเอง', 'QR Code ข้อความ', 'โหลดฟรี'
+            ],
+            cn: [
+                '二维码生成器', '免费二维码', '自定义文字', '在线制作', 
+                '创意二维码', '无需注册', '高清二维码', '个性化设计'
+            ],
+            jp: [
+                'QRコード作成', '無料QRコード', '文字入りQR', '登録不要', 
+                'デザインQR', 'QRコード生成', '高画質', 'オリジナルQR'
+            ]
+        };
+
+        const container = document.getElementById('tagContainer');
+        container.innerHTML = ''; // Clear existing
+        
+        const currentTags = tags[currentLang] || tags['en'];
+        
+        currentTags.forEach(tag => {
+            const span = document.createElement('span');
+            span.className = 'px-2 py-1 bg-white border border-gray-200 rounded text-xs text-gray-500 hover:border-indigo-300 transition-colors cursor-default';
+            span.textContent = tag;
+            container.appendChild(span);
+        });
+    }
+
+    // Initial call to set default language
+    updateLanguage();
 
     // Default generation
     generateQRCode();
