@@ -50,7 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
              buyCoffeeBtn: 'Buy me a Coffee',
              visitorLabel: 'Total Visits:',
              exampleTitle: 'Real Example',
-             exampleDesc: 'Try scanning this!'
+            exampleDesc: 'Try scanning this!',
+            popularTagsTitle: 'Popular Searches'
         },
         th: {
             subtitle: 'เปลี่ยน QR Code ธรรมดา ให้เป็น <span class="text-pink-500 font-medium">"คำพูด"</span> ของคุณ',
@@ -80,7 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
             buyCoffeeBtn: 'เลี้ยงกาแฟเรา',
             visitorLabel: 'เข้าชมแล้ว:',
             exampleTitle: 'ตัวอย่างงานจริง',
-            exampleDesc: 'ลองสแกนดูนะครับ!'
+            exampleDesc: 'ลองสแกนดูนะครับ!',
+            popularTagsTitle: 'คำค้นหายอดฮิต'
         }
     };
 
