@@ -461,8 +461,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // CSS Display Size
-            canvas.style.width = '400px';
-            canvas.style.height = 'auto'; // Maintain aspect ratio
+            canvas.style.width = '100%';
+            canvas.style.maxWidth = '420px';
+            canvas.style.height = 'auto';
 
             const ctxWidth = canvas.width;
             const ctxHeight = canvas.height;
